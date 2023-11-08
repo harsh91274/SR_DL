@@ -30,3 +30,20 @@ y_train = [y[i] for i in idx[:80]]
 X_test = [X[i] for i in idx[80:]]
 y_test = [y[i] for i in idx[80:]]
 
+#plot the distribution
+plt.scatter([i[0] for idx, i in enumerate(X_train) if y_train[idx] == 0],
+            [i[1] for idx, i in enumerate(X_train) if y_train[idx] == 0],
+            label='class 0', marker='o')
+
+plt.scatter([i[0] for idx, i in enumerate(X_train) if y_train[idx] == 1],
+            [i[1] for idx, i in enumerate(X_train) if y_train[idx] == 1],
+            label='class 1', marker='s')
+
+plt.title('Training set')
+plt.xlabel('feature 1')
+plt.ylabel('feature 2')
+plt.xlim([0.0, 7])
+plt.ylim([-0.8, 0.8])
+plt.legend()
+plt.show()
+
