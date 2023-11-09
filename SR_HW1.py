@@ -47,3 +47,44 @@ plt.ylim([-0.8, 0.8])
 plt.legend()
 plt.show()
 
+#%% Defining the Perceptron
+class Perceptron():
+    def __init__(self, num_features):
+        self.num_features = num_features
+        self.weights = np.zeros((num_features, 1), dtype=np.float32)
+        self.bias = np.zeros(1, dtype=np.float32)
+
+    def forward(self, x):
+        linear = np.dot(x, self.weights) + self.bias
+        predictions = np.where(linear > 0., 1, 0)
+        return predictions
+
+    def backward(self, x, y):
+        predictions = self.forward(x)
+        errors = y - predictions
+        return errors
+
+    def train(self, x, y, epochs):
+        for e in range(epochs):
+
+            for i in range(np.shape(y)[0]):
+                errors = self.backward(np.reshape(x[i], (1, self.num_features)), y[i]).reshape(-1)
+                self.weights += (errors * x[i]).reshape(self.num_features, 1)
+                self.bias += errors
+
+    def evaluate(self, x, y):
+        predictions = self.forward(x).reshape(-1)
+        accuracy = np.sum(predictions == y) / np.shape(y)[0]
+        return accuracy
+
+
+ppn = Perceptron(num_features=2)
+ppn.train(X_train, y_train, epochs=5);
+print('Model Parameters: \n\n');
+print('Model weights: ', ppn.weights);
+print('Model bias:', ppn.bias);
+
+train_acc=ppn.evaluate(X_train, y_train)
+test_acc = ppn.evaluate(X_test, y_test)
+print('Train set accuracy: %.2f%%' % (train_acc*100))
+print('Test set accuracy: %.2f%%' % (test_acc*100))
